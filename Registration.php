@@ -1,6 +1,5 @@
 <?php
-    session_start();
-
+session_start();
 function __autoload($class){
     
      include_once($class.".php");

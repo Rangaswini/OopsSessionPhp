@@ -1,14 +1,13 @@
 <?php
     session_start();
 
-    /*if(isset($_SESSION['uname']))
+    if(isset($_SESSION['uname']))
     {
       echo "You are already logged in ...";
-    }*/
-    //else{
+    }
+    else{
 ?>
-<!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -93,3 +92,6 @@
 </body>
 
 </html>
+<?php
+}
+?>

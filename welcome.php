@@ -1,13 +1,5 @@
 <?php
     session_start();
-
-
-   /* if( !isset($_SESSION['uname']) )
-    die( "Login required." );*/
-    
-
-    
-
 function __autoload($class){
     
     include_once($class.".php");
@@ -16,9 +8,9 @@ function __autoload($class){
   
     $conn=new Connect();
     error_reporting(E_ALL);
-ini_set('display_errors', 1); 
+    ini_set('display_errors', 1); 
     
-$row=$conn->showData($_POST['uname'],$_POST['pass']);
+    $row=$conn->showData($_POST['uname'],$_POST['pass']);
 if(!$row)
     {
         header('Location: ./index.php');
@@ -26,9 +18,12 @@ if(!$row)
     }
 else{
     $_SESSION["uname"]= $_POST['uname'];  // Set session variables
-$_SESSION["pass"]= $_POST['pass'];
-    echo "welcome".$_POST['uname']."!";
+    $_SESSION["pass"]= $_POST['pass'];
+    //echo "welcome".$_POST['uname']."!";
+    header('Location: ./WelMsg.php');
+
 
 }
+   
 
 ?>
