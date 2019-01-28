@@ -1,9 +1,26 @@
 <?php
     session_start();
 if(isset($_SESSION['uname']))
+{
 echo "You are already logged in ...";
+?>
+
+<html>
+<body>
+<form action=<?php echo $_SERVER['PHP_SELF'];?> method="POST">
+            <button type="submit" >Logout</button><br><br>
+            </form>
+            </body>
+            </html>            <?php
+            if($_SERVER["REQUEST_METHOD"]=="POST")
+            {
+                  session_destroy();
+                  header('Location: ./index.php');
+            }
+}
 
 else{
+   
 ?>
 <html >
 
@@ -30,6 +47,10 @@ else{
 
 if($_SERVER["REQUEST_METHOD"]=="POST")
 {
+
+
+
+
    include "Registration.php";
 $reg=new Registration();
 

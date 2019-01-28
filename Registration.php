@@ -1,10 +1,12 @@
 <?php
+include "Connect.php";
 
 function __autoload($class){
     
      include_once($class.".php");
     
     }
+
      error_reporting(E_ALL);
      ini_set('display_errors', 1); 
 class Registration{
@@ -12,6 +14,7 @@ class Registration{
     public function __construct()
     {
         $this->conn=new Connect();
+        
 
     }
     public function Login($uname,$pass)
@@ -24,7 +27,7 @@ class Registration{
     public function register($id,$rname,$email,$gender,$dob,$qualification,$username,$pass)
     {
         $sql="INSERT INTO registerUser (id,rname,email,gender,dob,qualification,username,pass) VALUES ('$id', '$rname', '$email', '$gender', '$dob', '$qualification', '$username', '$pass')";
-        $q = $conn->conn->prepare($sql);
+        $q = $this->conn->conn->prepare($sql);
         $q->execute();
         return true;
     }

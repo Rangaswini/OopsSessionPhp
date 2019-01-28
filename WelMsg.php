@@ -8,23 +8,24 @@ if( isset($_SESSION['uname']) )
 <html>
 <body>
 <form action=<?php echo $_SERVER['PHP_SELF'];?> method="POST">
-            Welcome!!!!
             <button type="submit">Logout</button><br><br>
             </form>
             </body>
             </html>
 
             <?php
-           
 }
 else{
     echo "Login First";
+    ?>
+    <a href="index.php">Home</a>
+    <?php
+
 }
- if($_SERVER["REQUEST_METHOD"]=="POST")
- {
+if($_SERVER["REQUEST_METHOD"]=="POST")
+{
       session_destroy();
       header('Location: ./index.php');
-    
- }
+}
 
-?>
+            ?>

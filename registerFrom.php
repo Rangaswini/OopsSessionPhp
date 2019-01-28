@@ -1,6 +1,6 @@
 <?php
     session_start();
-
+   
     if(isset($_SESSION['uname']))
     {
       echo "You are already logged in ...";
@@ -50,18 +50,32 @@
     }
 if($_SERVER["REQUEST_METHOD"]=="POST")
 {
-    include "Registration.php";
+    $rndno=rand(100000, 999999);
+ $message = "otp number.".$rndno; 
+ $to=$_POST['email']; 
+ $subject = "OTP"; $txt = "OTP: ".$rndno.""; 
+// mail($to,$subject,$txt,$headers); 
+ $_SESSION['email']=$_POST['email']; 
+ $_SESSION['msg']=$message;
+ $_SESSION['otp']=$rndno;
+ 
 
-$reg=new Registration();
+ $_SESSION['id']=$_POST['id']; 
+ $_SESSION['rname']=$_POST['rname']; 
+ $_SESSION['email']=$_POST['email']; 
+ $_SESSION['gender']=$_POST['gender']; 
+ $_SESSION['qualification']=$_POST['qualification']; 
+ $_SESSION['dob']=$_POST['dob']; 
+ $_SESSION['uname']=$_POST['username']; 
+ $_SESSION['pass']=$_POST['pass']; 
+ 
 
-$result1=$reg->register($_POST['id'],$_POST['rname'],$_POST['email'],$_POST['gender'],$_POST['dob'],$_POST['qualification'],$_POST['username'],$_POST['pass']);
-if(!$result1)
-{
-echo"not Inserted";}
-else
-{
-    echo"Inserted";
-}
+
+ header('Location: ./mailtrail.php');
+
+
+
+
 }
 
 ?>
