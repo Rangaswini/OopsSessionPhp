@@ -8,17 +8,33 @@ require 'vendor/autoload.php';
 if( isset($_SESSION['uname']) )
 {
             echo "welcome".$_SESSION['uname']."!";
-?> 
-<html>
-<body>
-<form action=<?php echo $_SERVER['PHP_SELF'];?> method="POST">
-            <button type="submit">Logout</button><br><br>
-            </form>
-            </body>
-            </html>
 
+           
+       if($_SESSION['uid']==1 || $_SESSION['uRole']=='subAdmin' )
+       {    
+      ?>
+            <html>
+       <body>
+          You can do registration of other users also<a href="userAdd.php">Register here</a>
+          <br><br>
+          You can do registration of other users also<a href="userDelete.php">Delete</a>
+          <br><br>
+          You can do registration of other users also<a href="userDisplay.php">Display</a>
+          <br><br>
+          You can do registration of other users also<a href="userUpdate.php">Update</a>
+          <br><br>
+       <?php
+
+       }
+       ?>
+     <form action="" method="post">
+     <input type="submit" name="logout" value="logout">
+     </form>
             <?php
-}
+             
+             
+             }
+
 else{
     echo "Login First";
     ?>
@@ -26,10 +42,11 @@ else{
     <?php
 
 }
-if($_SERVER["REQUEST_METHOD"]=="POST")
+if(isset($_POST['logout']))
 {
       session_destroy();
-      header('Location: ./index.php');
+    header('Location: ./index.php');
 }
 
             ?>
+            

@@ -33,7 +33,8 @@ use Rango\Registration\Connect;
        // Optional name
  
      //Content
-    $mail->isHTML(true);                                  // Set email format to HTML
+     if(!($_SESSION['uid']==1 || $_SESSION['uRole']=='subAdmin'))
+    {$mail->isHTML(true);                                  // Set email format to HTML
      $mail->Subject = 'Here is the subject';
      $mail->Body    = "OTP".$_SESSION['otp'];
      $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
@@ -45,19 +46,33 @@ use Rango\Registration\Connect;
      <input type="submit" name="encrypt" value="Verify">
      </form>
       <?php
-      
- if(isset($_POST['encrypt'])) 
+       // $rno=$_SESSION['otp'];
+       // $urno=$_POST['otpvalue'];
+    }
+ if(isset($_POST['encrypt']) || $_SESSION['uRole']=='subAdmin' || $_SESSION['uid']==1) 
  {
-    $rno=$_SESSION['otp'];
-    $urno=$_POST['otpvalue'];
+  
     
-    if(!strcmp($rno,$urno))
+    if((!strcmp($_SESSION['otp'],$_POST['otpvalue'])) || $_SESSION['uRole']=='subAdmin' || $_SESSION['uid']==1)
     {
        // include "Registration.php";
 
         $reg=new Registration();
+        if($_SESSION['up']==1)
+        {       // echo "fjha;";exit();
 
-        $result1=$reg->register($_SESSION['rname'],$_SESSION['email'],$_SESSION['gender'],$_SESSION['dob'],$_SESSION['qualification'],$_SESSION['pass']);
+            $result1=$reg->updateUser($_SESSION['up_id'],$_SESSION['rname'],$_SESSION['email'],$_SESSION['gender'],$_SESSION['dob'],$_SESSION['qualification'],$_SESSION['pass'],$_SESSION['role']);
+
+            if($result1==1)
+        {
+        echo"updated";}
+        else
+        {
+            echo"not updated";
+        }
+    }
+        else{
+        $result1=$reg->register($_SESSION['rname'],$_SESSION['email'],$_SESSION['gender'],$_SESSION['dob'],$_SESSION['qualification'],$_SESSION['pass'],$_SESSION['role']);
         if(!$result1)
         {
         echo"not Inserted";}
@@ -66,11 +81,12 @@ use Rango\Registration\Connect;
             echo"Inserted";
             ?>
 
-            <a href="index.php">Home</a>
+            <a href="WelMsg.php">Back</a>
             <?php
         }
-        //echo"valid";
     }
+        //echo"valid";
+    }   
     else{
     echo "<p>Invalid OTP</p>";
     }

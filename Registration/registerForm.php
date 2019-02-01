@@ -5,21 +5,33 @@ use Rango\Registration\Connect;
 require 'vendor/autoload.php';
 
     session_start();
-   
+    if(!($_SESSION['uid']==1 || $_SESSION['uRole']=='subAdmin'))
+    {
     if(isset($_SESSION['uname']))
     {
       echo "You are already logged in ...";
-    }
-    else{
-?>
-<html>
+      ?>
 
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Index</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-</head>
-<body>
+      <html>
+      <body>
+      <form action=<?php echo $_SERVER['PHP_SELF'];?> method="POST">
+                  <input type="submit" name="logout" value="Logout" ><br><br>
+                  </form>
+                  </body>
+                  </html>           
+                   <?php
+                  if(isset($_POST['logout']))
+                  {
+                        session_destroy();
+                        header('Location: ./index.php');
+                  }
+      }
+      
+    }
+    if(!isset($_SESSION['uname']) || ($_SESSION['uid']==1) || $_SESSION['uRole']=='subAdmin')
+    {
+?>
+
     <h2> Registration Information</h2>
     <div class="container">
         <form action="" method="post">
@@ -40,13 +52,23 @@ require 'vendor/autoload.php';
                 <option value="ME">ME</option>
             </select><br>
             <input type="password" name="pass" placeholder="Password" required><br>
-            Select a file: <input type="file" name="photo"><br><br>
+            <!-- Select a file: <input type="file" name="photo"><br><br> -->
+            <?php
+            if($_SESSION['uid']==1 || $_SESSION['uRole']=='subAdmin')
+            {
+            ?>
+            <input name="role" type="text" placeholder="Enter Role"><br><br>
+            <?php
+            }
+            ?>
             <input type="submit">
             <input type="reset">
 
         </form>
     </div>
 </body>
+
+
 
 </html>
 <?php
@@ -69,6 +91,8 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
  $_SESSION['qualification']=$_POST['qualification']; 
  $_SESSION['dob']=$_POST['dob']; 
  $_SESSION['pass']=$_POST['pass']; 
+ $_SESSION['role']=$_POST['role']; 
+
  
 
 

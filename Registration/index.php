@@ -1,4 +1,5 @@
 <?php
+require 'vendor/autoload.php';
 
 use Rango\Registration\Registration;
 use Rango\Registration\Connect;
@@ -9,7 +10,13 @@ if(isset($_SESSION['uname']))
 echo "You are already logged in ...";
 ?>
 
-<html>
+<html >
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Index</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
 <body>
 <form action=<?php echo $_SERVER['PHP_SELF'];?> method="POST">
             <button type="submit" >Logout</button><br><br>
@@ -26,14 +33,7 @@ echo "You are already logged in ...";
 else{
    
 ?>
-<html >
 
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Index</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-</head>
-<body>
 <h2> Login Here</h2>
     <div class="container">
     <form action=<?php echo $_SERVER['PHP_SELF'];?> method="POST">
@@ -51,41 +51,23 @@ else{
 
 if($_SERVER["REQUEST_METHOD"]=="POST")
 {
-
-
-
-    require 'vendor/autoload.php';
-
-   //include "Registration.php";
+ //include "Registration.php";
 $reg=new Registration();
 
 $result=$reg->Login($_POST['uname'],$_POST['pass']);
+
+    
 if($result==1)
 {
     $_SESSION["uname"]= $_POST['uname'];  // Set session variables
     $_SESSION["pass"]= $_POST['pass'];
-    if(!empty($_POST['remember']))
-    {
-        setcookie("userName", $_POST['uname'], time()+3600);
-        setcookie("pass", $_POST['pass'], time()+3600);
-
-    }
-    else{
-        if(isset($_COOKIE['userName']))
-        {
-            setcookie("userName","");
-
-        }
-        if(isset($_COOKIE['pass']))
-        {
-            setcookie("pass","");
-
-        }
-        }
-    $_SESSION["uname"]= $_POST['uname'];  // Set session variables
-    $_SESSION["pass"]= $_POST['pass'];
+    $_SESSION['remember']=isset($_POST['remember']) ? $_POST['remember'] : '';
     header('Location: ./WelMsg.php');
 }
+// else if($result==2)
+// {
+//     header('Location: ./WelMsg.php');
+// }
 else
 {
     echo"Invalid User";

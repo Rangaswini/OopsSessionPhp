@@ -1,17 +1,10 @@
 <?php
 
 namespace Rango\Registration;
+use \PDO;
 use Rango\Registration\Connect;
 require 'vendor/autoload.php';
 
-
-// include "Connect.php";
-
-// function __autoload($class){
-    
-//      include_once($class.".php");
-    
-//     }
 
      error_reporting(E_ALL);
      ini_set('display_errors', 1); 
@@ -25,13 +18,43 @@ class Registration{
     }
     public function Login($uname,$pass)
     {
-        $pass=md5($pass);
-        $stmt =$this->conn->conn->prepare("SELECT * FROM registerUser WHERE email = '$uname' AND pass = '$pass' ;");
-        $stmt->execute();
-        $r=$stmt->rowCount();
-        return $r;
+        $pass=md5($pass); 
+        $stmt = $this->conn->conn->query("SELECT userid,uRole FROM registerUser WHERE email = '$uname' AND pass = '$pass'");
+        //return $stmt;
+        foreach ($stmt as $row)
+        {
+            $_SESSION['uid']=$row['userid'];
+            $_SESSION['uRole']=$row['uRole'];
+
+        }
+        if($stmt->rowCount()==1)
+        {
+            if(!empty($_SESSION['remember']))
+            {
+                setcookie("userName", $_SESSION['uname'], time()+3600);
+                setcookie("pass", $_SESSION['pass'], time()+3600);
+        
+            }
+            else{
+                if(isset($_COOKIE['userName']))
+                {
+                    setcookie("userName","");
+        
+                }
+                if(isset($_COOKIE['pass']))
+                {
+                    setcookie("pass","");
+        
+                }
+                }
+        }
+        if($stmt->rowCount()==1 || $_SESSION['uid']==1 || $_SESSION['uRole']=='subAdmin')
+        {
+            return 1;
+       }
+
     }
-    public function register($rname,$email,$gender,$dob,$qualification,$pass)
+    public function register($rname,$email,$gender,$dob,$qualification,$pass,$role="user")
     {
         $stmt =$this->conn->conn->prepare("SELECT * FROM registerUser WHERE email = '$email';");
         $stmt->execute();
@@ -47,11 +70,42 @@ class Registration{
         else{
              $pass=md5($pass);
 
-             $sql="INSERT INTO registerUser (rname,email,gender,dob,qualification,pass) VALUES ('$rname', '$email', '$gender', '$dob', '$qualification','$pass')";
+             $sql="INSERT INTO registerUser (rname,email,gender,dob,qualification,pass,uRole) VALUES ('$rname', '$email', '$gender', '$dob', '$qualification','$pass','$role')";
              $q = $this->conn->conn->prepare($sql);
              $q->execute();
              return true;
         }
+    }
+    public function deleteUser($uid)
+    {
+        $sql = "DELETE FROM registerUser WHERE userid = ?";        
+        $q =$this->conn->conn->prepare($sql);
+
+         $q->execute(array($uid));  
+         $r=$q->rowCount();
+
+             return $r;
+    }
+    public function display($role)
+    {
+        if($role=='all')
+        {
+            $stmt1 = $this->conn->conn->query("SELECT * FROM registerUser");
+
+        }
+        else{
+        $stmt1 = $this->conn->conn->query("SELECT * FROM registerUser WHERE uRole='$role' ");
+        }
+        $rows = $stmt1->fetchAll(PDO::FETCH_NUM);
+        return $rows;
+    }
+    
+    public function updateUser($userid,$rname,$email,$gender,$dob,$qualification,$pass,$role)
+    { 
+        $stmt=$this->conn->conn->prepare("UPDATE registerUser SET rname='$rname',email='$email',gender='$gender',dob='$dob',qualification='$qualification',pass='$pass',uRole='$role' WHERE userid=$userid ");
+        $stmt->execute();
+        $r=$stmt->rowCount();
+        return $r;
     }
 }
 
