@@ -5,8 +5,6 @@ use Rango\Registration\Connect;
  use PHPMailer\PHPMailer\PHPMailer;
  use PHPMailer\PHPMailer\Exception;
 
-// Import PHPMailer classes into the global namespace
- // These must be at the top of your script, not inside a function
  
  
  //Load Composer's autoloader
@@ -55,11 +53,10 @@ use Rango\Registration\Connect;
     
     if((!strcmp($_SESSION['otp'],$_POST['otpvalue'])) || $_SESSION['uRole']=='subAdmin' || $_SESSION['uid']==1)
     {
-       // include "Registration.php";
 
         $reg=new Registration();
         if($_SESSION['up']==1)
-        {       // echo "fjha;";exit();
+        {      
 
             $result1=$reg->updateUser($_SESSION['up_id'],$_SESSION['rname'],$_SESSION['email'],$_SESSION['gender'],$_SESSION['dob'],$_SESSION['qualification'],$_SESSION['pass'],$_SESSION['role']);
 
@@ -85,7 +82,7 @@ use Rango\Registration\Connect;
             <?php
         }
     }
-        //echo"valid";
+       
     }   
     else{
     echo "<p>Invalid OTP</p>";

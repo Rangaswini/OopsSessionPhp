@@ -9,19 +9,45 @@ if($_SESSION['uid']==1 || $_SESSION['uRole']=='subAdmin' )
     ?>
     <form action="" method="POST">
     <select name="roles">
-  <option value="subAdmin">admin</option>
-  <option value="user">user</option>
-  <option value="all">all</option>
+    <option value="subAdmin">admin</option>
+    <option value="user">user</option>
+    <option value="all">all</option>
   
      <input type="submit" name="displayOp" value="Display">
      </form>
-  
-  </select>  
+   </select>  
     <?php
+}
     if($_SERVER["REQUEST_METHOD"]=="POST")
-    {        
+    {     //echo "<br>hello";   
+        mydisplay($_POST['roles']);
+    }
+    else{
+        mydisplay("all");
+    }
+    function mydisplay($mr)
+    {
+        
+        $page=$_GET['page'];
+        if($page=="" || $page=="1")
+        {
+            $_SESSION['page1']=0;
+        }
+        else
+        {
+            $_SESSION['page1']=($page*2)-2;
+        }
         $reg=new Registration();
-        $r=$reg->display($_POST['roles']);
+        
+        $reg=new Registration();
+        $count=$reg->countRow($mr);
+        $pageCount=ceil(count($count)/2);
+        for($b=1;$b<=$pageCount;$b++)
+        {
+            ?><a href="userDisplay.php?page=<?php echo $b; ?>"><?php echo $b."";?></a><?php
+        }
+        $reg=new Registration();
+        $r=$reg->displaypages($mr);
         $c=0;
         echo "<table border='1'>
         <tr>
@@ -37,7 +63,7 @@ if($_SESSION['uid']==1 || $_SESSION['uRole']=='subAdmin' )
         echo "<td>" . $r[$c][1] . "</td>";
         echo "<td>" . $r[$c][2] . "</td>";
         echo "<td>" . $r[$c][3] . "</td>";
-        echo "<td>" . $r[$c][4] . "</td>";
+        echo "<td>" . $r[$c][4] . "</td>"; 
         echo "<td>" . $r[$c][5] . "</td>";
         echo "<td>" . $r[$c][7] . "</td>";
         echo "</tr>";
@@ -45,7 +71,7 @@ if($_SESSION['uid']==1 || $_SESSION['uRole']=='subAdmin' )
         }
         echo "</table>";
     }
-}
+
 
 
 ?>

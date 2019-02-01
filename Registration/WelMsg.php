@@ -23,6 +23,7 @@ if( isset($_SESSION['uname']) )
           <br><br>
           You can do registration of other users also<a href="userUpdate.php">Update</a>
           <br><br>
+          
        <?php
 
        }

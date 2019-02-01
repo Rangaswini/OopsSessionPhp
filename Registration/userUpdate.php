@@ -9,7 +9,7 @@ if($_SESSION['uid']==1 || $_SESSION['uRole']=='subAdmin')
     $_SESSION['up']=1;
 
     $reg=new Registration();
-    $r=$reg->display();
+    $r=$reg->display('all');
     $c=0;
     
     echo "<table border='1'>

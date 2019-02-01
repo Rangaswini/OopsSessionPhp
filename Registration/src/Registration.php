@@ -91,15 +91,55 @@ class Registration{
         if($role=='all')
         {
             $stmt1 = $this->conn->conn->query("SELECT * FROM registerUser");
+        }
+        else if($role=='subAdmin'){
 
+        $stmt1 = $this->conn->conn->query("SELECT * FROM registerUser WHERE userid=1 || uRole='subAdmin'");
         }
         else{
-        $stmt1 = $this->conn->conn->query("SELECT * FROM registerUser WHERE uRole='$role' ");
+            $stmt1 = $this->conn->conn->query("SELECT * FROM registerUser WHERE uRole='user'");
+
         }
         $rows = $stmt1->fetchAll(PDO::FETCH_NUM);
+       
         return $rows;
     }
-    
+    public function displayPages($role)
+    {
+        if($role=='all')
+        {
+            $stmt1 = $this->conn->conn->query("SELECT * FROM registerUser LIMIT $_SESSION[page1],2");
+        }
+        else if($role=='subAdmin'){
+
+        $stmt1 = $this->conn->conn->query("SELECT * FROM registerUser WHERE userid=1 || uRole='subAdmin' LIMIT $_SESSION[page1],2 ");
+        }
+        else{
+            $stmt1 = $this->conn->conn->query("SELECT * FROM registerUser WHERE uRole='user' LIMIT $_SESSION[page1],2 ");
+
+        }
+        $rows = $stmt1->fetchAll(PDO::FETCH_NUM);
+       
+        return $rows;
+    }
+    public function countRow($role)
+    {
+        if($role=='all')
+        {
+            $stmt1 = $this->conn->conn->query("SELECT * FROM registerUser");
+        }
+        else if($role=='subAdmin'){
+
+        $stmt1 = $this->conn->conn->query("SELECT * FROM registerUser WHERE userid=1 || uRole='subAdmin' ");
+        }
+        else{
+            $stmt1 = $this->conn->conn->query("SELECT * FROM registerUser WHERE uRole='user' ");
+
+        }
+        $rows = $stmt1->fetchAll(PDO::FETCH_NUM);
+       
+        return $rows;  
+    }
     public function updateUser($userid,$rname,$email,$gender,$dob,$qualification,$pass,$role)
     { 
         $stmt=$this->conn->conn->prepare("UPDATE registerUser SET rname='$rname',email='$email',gender='$gender',dob='$dob',qualification='$qualification',pass='$pass',uRole='$role' WHERE userid=$userid ");
